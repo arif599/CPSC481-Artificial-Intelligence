@@ -36,7 +36,13 @@ class MissCannibals(Problem):
         return tuple(new_state)
 
 
-    
+    def goal_test(self, state):
+        """ Given a state, return True if state is a goal state or False, otherwise """
+
+        return state == self.goal
+
+
+
 if __name__ == '__main__':
     mc = MissCannibals(3,3)
     #print(mc.actions((3, 2, True))) # Test your code as you develop! This should return  ['CC', 'C', 'M']
