@@ -22,13 +22,31 @@ class MissCannibals(Problem):
 
         return possible_actions
 
-    
+    def result(self, state, action):
+        """ Given state and action, return a new state that is the result of the action.
+        Action is assumed to be a valid action in the state """
 
+        new_state = list(state)
+        mCount = state[0]
+        cCount = state[1]
+        new_state[0] = new_state[0] - action.count('M')
+        new_state[1] = new_state[1] - action.count('C')
+        new_state[2] = not new_state[2]
+
+        return tuple(new_state)
+
+
+    
 if __name__ == '__main__':
     mc = MissCannibals(3,3)
     #print(mc.actions((3, 2, True))) # Test your code as you develop! This should return  ['CC', 'C', 'M']
 	
-    path = depth_first_graph_search(mc).solution()
-    print(path)
-    path = breadth_first_graph_search(mc).solution()
-    print(path)
+    # path = depth_first_graph_search(mc).solution()
+    # print(path)
+    # path = breadth_first_graph_search(mc).solution()
+    # print(path)
+
+    print(mc.result((3,3, True), 'MM'))
+
+
+
