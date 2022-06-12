@@ -29,10 +29,19 @@ class MissCannibals(Problem):
         new_state = list(state)
         mCount = state[0]
         cCount = state[1]
-        new_state[0] = new_state[0] - action.count('M')
-        new_state[1] = new_state[1] - action.count('C')
-        new_state[2] = not new_state[2]
 
+        if mCount < action.count('M') or cCount < action.count('C'):
+            return None
+
+        if new_state[2] == True:
+            new_state[0] = new_state[0] - action.count('M')
+            new_state[1] = new_state[1] - action.count('C')
+            new_state[2] = not new_state[2]
+        else:
+            new_state[0] = new_state[0] + action.count('M')
+            new_state[1] = new_state[1] + action.count('C')
+            new_state[2] = not new_state[2]
+            
         return tuple(new_state)
 
 
