@@ -16,8 +16,8 @@ class MissCannibals(Problem):
         mCount = state[0]
         cCount = state[1]
 
-        for action in possible_actions:
-            if action.count('M') > mCount or action.count('C') > cCount:
+        for action in possible_actions[:]:
+            if action.count('M') > mCount or action.count('C') > cCount: 
                 possible_actions.remove(action)
 
         return possible_actions
