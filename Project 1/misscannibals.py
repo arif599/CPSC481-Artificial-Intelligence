@@ -23,28 +23,24 @@ class MissCannibals(Problem):
             if action.count('M') > mCount or action.count('C') > cCount: 
                 possible_actions.remove(action)
                 continue
+            
             if onLeft == False:
                 leftMCount = self.M - mCount + action.count('M')
                 leftCCount = self.C - cCount + action.count('C')
                 rightMCount = mCount - action.count('M')
                 rightCCount = cCount - action.count('C')
-                if leftMCount > self.M or rightMCount > self.M or leftCCount > self.C or rightCCount > self.C:
-                    possible_actions.remove(action)
-                    continue
-                if leftMCount < leftCCount and leftMCount != 0 or rightMCount < rightCCount and rightMCount != 0:
-                    possible_actions.remove(action)
-                    continue
-            if onLeft and mCount - action.count('M') < self.C and cCount - action.count('C') < self.M:
+            else:
                 leftMCount = mCount - action.count('M')
                 leftCCount = cCount - action.count('C')
                 rightMCount = self.M - mCount + action.count('M')
                 rightCCount =self.M - mCount + action.count('C')
-                if leftMCount > self.M or rightMCount > self.M or leftCCount > self.C or rightCCount > self.C:
-                    possible_actions.remove(action)
-                    continue
-                if leftMCount < leftCCount and leftMCount != 0 or rightMCount < rightCCount and rightMCount != 0:
-                    possible_actions.remove(action)
-                    continue
+
+            if leftMCount > self.M or rightMCount > self.M or leftCCount > self.C or rightCCount > self.C:
+                possible_actions.remove(action)
+                continue
+            if leftMCount < leftCCount and leftMCount != 0 or rightMCount < rightCCount and rightMCount != 0:
+                possible_actions.remove(action)
+                continue
 
         return possible_actions
 
@@ -87,8 +83,8 @@ if __name__ == '__main__':
     print(mc.result((1,1,False), 'MC'))
     print(mc.result((1,1,False), 'MM'))
 
-    path = depth_first_graph_search(mc).solution()
-    print(path)
+    # path = depth_first_graph_search(mc).solution()
+    # print(path)
     # path = breadth_first_graph_search(mc).solution()
     # print(path)
 
