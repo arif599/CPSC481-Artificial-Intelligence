@@ -7,42 +7,55 @@ class MissCannibals(Problem):
         self.C = C
         super().__init__(initial, goal)
 
+    def valid_state(self, count):
+        mLeftCount = count[0]
+        cLeftCount = count[1]
+        mRightCount = count[2]
+        cRightCount = count[3]
+        onLeft = count[4]
+
+        if (mLeftCount != 0 and cLeftCount > mLeftCount) \
+                or (mRightCount != 0 and cRightCount > mRightCount) \
+                or mLeftCount < 0 or cLeftCount < 0 or mRightCount < 0 \
+                or cRightCount < 0:
+            return False
+        else:
+            return True
+
     def actions(self, state):
         """ Return the actions that can be executed in the given state.
         The result would be a list, since there are only five possible actions ('MM', 'MC', 'CC', 'M', 'C')
         in any given state of the environment """
 
         possible_actions = ['MM', 'MC', 'CC', 'M', 'C']
-        mCount = state[0]
-        cCount = state[1]
         onLeft = state[2]
+        result = []
 
-        for action in possible_actions[:]:
-            # going from L to R delete the count and check if missionaries are greater than cannibals
-            # going from R to L add to the count and check if missionaries are greater than cannibals
-            if action.count('M') > mCount or action.count('C') > cCount: 
-                possible_actions.remove(action)
-                continue
-            
-            if onLeft == False:
-                leftMCount = self.M - mCount + action.count('M')
-                leftCCount = self.C - cCount + action.count('C')
-                rightMCount = mCount - action.count('M')
-                rightCCount = cCount - action.count('C')
-            else:
-                leftMCount = mCount - action.count('M')
-                leftCCount = cCount - action.count('C')
-                rightMCount = self.M - mCount + action.count('M')
-                rightCCount =self.M - mCount + action.count('C')
+        if onLeft:
+            mLeftCount = state[0]
+            cLeftCount = state[1]
+            mRightCount = self.M - mLeftCount
+            cRightCount = self.C - cLeftCount
 
-            if leftMCount > self.M or rightMCount > self.M or leftCCount > self.C or rightCCount > self.C:
-                possible_actions.remove(action)
-                continue
-            if leftMCount < leftCCount and leftMCount != 0 or rightMCount < rightCCount and rightMCount != 0:
-                possible_actions.remove(action)
-                continue
+            for action in possible_actions:
+                actionMCount = action.count('M')
+                actionCCount = action.count('C')
+                new_counts = (mLeftCount-actionMCount, cLeftCount-actionCCount, mRightCount+actionMCount, cRightCount+actionCCount, not onLeft)
+                if self.valid_state(new_counts):
+                    result.append(action)
+        else:
+            mLeftCount = state[0]
+            cLeftCount = state[1]
+            mRightCount = self.M - mLeftCount
+            cRightCount = self.C - cLeftCount
 
-        return possible_actions
+            for action in possible_actions:
+                actionMCount = action.count('M')
+                actionCCount = action.count('C')
+                new_counts = (mLeftCount+actionMCount, cLeftCount+actionCCount, mRightCount-actionMCount, cRightCount-actionCCount, not onLeft)
+                if self.valid_state(new_counts):
+                    result.append(action)
+        return result
 
     def result(self, state, action):
         """ Given state and action, return a new state that is the result of the action.
@@ -66,7 +79,6 @@ class MissCannibals(Problem):
 
     def goal_test(self, state):
         """ Given a state, return True if state is a goal state or False, otherwise """
-
         return state == self.goal
 
     def check_solvability(self, state):
@@ -83,12 +95,12 @@ if __name__ == '__main__':
     print(mc.result((1,1,False), 'MC'))
     print(mc.result((1,1,False), 'MM'))
 
-    # path = depth_first_graph_search(mc).solution()
-    # print(path)
-    # path = breadth_first_graph_search(mc).solution()
-    # print(path)
+    path = depth_first_graph_search(mc).solution()
+    print(path)
+    path = breadth_first_graph_search(mc).solution()
+    print(path)
 
-    # print(mc.result((3,3, True), 'MM'))
+    print(mc.result((3,3, True), 'MM'))
 
 
 
